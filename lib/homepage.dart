@@ -9,6 +9,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  TextEditingController inputController= TextEditingController();
+  String resultMessage = "";
+  static const String key = 'xznlwebgjhqdyvtkfuompciasr';
+  static const String defaultValue = 'abcdefghijklmnopqrstuvwxyz';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,14 +24,19 @@ class _HomePageState extends State<HomePage> {
               height: ph(context, 20),
               child: Container(),
             ),
-            const TextField(
-              decoration: InputDecoration(
-                hintText: 'Enter something'
-              ),
+            TextFormField(
+              decoration: const InputDecoration(hintText: 'Enter something'),
+              controller: inputController,
             ),
             SizedBox(
-              height: ph(context, 5),
-              child: Container(),
+              height: ph(context, 15),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  color: Colors.green,
+                  child: Text(resultMessage),
+                ),
+              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -39,6 +48,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   onPressed: () {
                     setState(() {
+                      resultMessage = encrypting_function(inputController.text);
                     });
                   },
                   child: const Text('Encryption'),
@@ -50,11 +60,11 @@ class _HomePageState extends State<HomePage> {
                   ),
                   onPressed: () {
                     setState(() {
+                      resultMessage = decrypting_function(inputController.text);
                     });
                   },
                   child: const Text('Decryption'),
                 ),
-
               ],
             )
           ],
@@ -62,4 +72,21 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+  String encrypting_function(String message) {
+    String result = "";
+    message.split('').forEach((element) {
+      int position = defaultValue.indexOf(element);
+      result += key[position];
+    });
+    return result;
+  }
+  String decrypting_function(String message) {
+    String result = "";
+    message.split('').forEach((element) {
+      int position = key.indexOf(element);
+      result += defaultValue[position];
+    });
+    return result;
+  }
 }
+
